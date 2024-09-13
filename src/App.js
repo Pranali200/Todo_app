@@ -1,25 +1,44 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import ToDoForm from './components/ToDoForm';
+import ToDoList from './components/ToDoList';
+import './style.css';
+
 
 function App() {
+  const [tasks, setTasks] = useState([]);
+
+  const addTask = (newTask) => {
+    setTasks([...tasks, newTask]);
+  };
+
+  const editTask = (index) => {
+    const updatedTask = prompt('Edit the task:', tasks[index]);
+    if (updatedTask) {
+      const newTasks = [...tasks];
+      newTasks[index] = updatedTask;
+      setTasks(newTasks);
+    }
+  };
+
+  const deleteTask = (index) => {
+    const newTasks = tasks.filter((_, i) => i !== index);
+    setTasks(newTasks);
+  };
+
+  const deleteAllTasks = () => {
+    setTasks([]);
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>To-Do List</h1>
+      <ToDoForm addTask={addTask} />
+      <ToDoList tasks={tasks} editTask={editTask} deleteTask={deleteTask} />
+      {tasks.length > 0 && <button onClick={deleteAllTasks}>Delete All</button>}
     </div>
   );
 }
+
+
 
 export default App;
